@@ -33,6 +33,21 @@ const burgers = {
     }
 }
 
+const extras = {
+    doubleMayonnaise: {
+        price: 2000,
+        kcall: 50
+    },
+    lettuce: {
+        price: 3000,
+        kcall: 30
+    },
+    cheese: {
+        price: 4000,
+        kcall: 50
+    }
+}
+
 // Product buttonlarga ulanib oldim
 const productBtns = document.querySelectorAll(".main__product-btn")
 
@@ -57,6 +72,7 @@ productBtns.forEach(function (btn) {
         productAmount.innerHTML = product.amount;
         productPrice.innerHTML = product.Summ;
         productKcall.innerHTML = product.kcall * product.amount;
+
     })
 });
 
@@ -82,8 +98,29 @@ mainProductInfo.forEach((imgs) => {
     })
 })
 
-// qo'shimcha souslar
+// Qo'shimcha souslar
 
-const mainProductLabel = document.querySelector(".main__product-label"),
-    mainProductCheckbox = document.querySelector(".main__product-checkbox")
+const sousCheckboxes = document.querySelectorAll(".main__product-checkbox");
 
+sousCheckboxes.forEach(function (checkbox) {
+    checkbox.addEventListener("click", function () {
+        const parent = this.closest(".main__product"),
+              parentId = parent.getAttribute("id"),
+              product = burgers[parentId],
+              productPrice = parent.querySelector(".main__product-price span"),
+              productKcall = parent.querySelector(".main__product-kcall span");
+
+        // checked bo‘lsa qo‘shamiz, uncheck bo‘lsa ayiramiz
+        if (this.checked) {
+            product.price += extras[this.dataset.extra].price;
+            product.kcall += extras[this.dataset.extra].kcall;
+        } else {
+            product.price -= extras[this.dataset.extra].price;
+            product.kcall -= extras[this.dataset.extra].kcall;
+        }
+
+        // narx va kkalni yangilab qo'yamiz
+        productPrice.innerHTML = product.Summ;
+        productKcall.innerHTML = product.kcall * product.amount;
+    });
+});
